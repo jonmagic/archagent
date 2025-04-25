@@ -1,8 +1,25 @@
 import { describe, it, expect } from 'vitest'
-const { helloWorld } = await import('../src/index')
+const { analyzeSourceCode } = await import('../src/index')
 
-describe('helloWorld', () => {
-  it('should return hello world', async () => {
-    expect(helloWorld()).toBe('Hello, world!')
+const sourceCode = `
+class SomeClass
+  def some_method
+    puts "Hello, world!"
+  end
+
+  def another_method
+    puts "This is another method."
+  end
+end
+`.trim()
+
+describe('analyzeSourceCode', () => {
+  it('returns JSON with the classes and functions', async () => {
+    const expected = {
+      language: 'Ruby',
+      classes: ['SomeClass'],
+      functions: ['some_method', 'another_method'],
+    }
+    expect(await analyzeSourceCode(sourceCode)).toBe(JSON.stringify(expected, null, 2))
   })
 })
