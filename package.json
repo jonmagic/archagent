@@ -6,8 +6,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node --loader ts-node/esm src/index.ts",
-    "debug": "DEBUG=true node --loader ts-node/esm src/index.ts",
+    "start": "node --no-warnings --loader ts-node/esm src/index.ts",
+    "debug": "DEBUG=true node --no-warnings --loader ts-node/esm src/index.ts",
     "analyze": "node --loader ts-node/esm src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest watch",
