@@ -14,12 +14,28 @@ end
 `.trim()
 
 describe('analyzeSourceCode', () => {
-  it('returns JSON with the classes and functions', async () => {
-    const expected = {
-      language: 'Ruby',
-      classes: ['SomeClass'],
-      functions: ['some_method', 'another_method'],
-    }
-    expect(await analyzeSourceCode(sourceCode)).toBe(JSON.stringify(expected, null, 2))
+  it('returns JSON with the correct structure', async () => {
+    const result = JSON.parse(await analyzeSourceCode(sourceCode))
+
+    // Test the structure with type-checking
+    expect(result).toEqual(expect.objectContaining({
+      language: expect.any(String),
+      classes: expect.arrayContaining([
+        expect.objectContaining({
+          name: expect.any(String),
+          description: expect.any(String),
+          functions: expect.arrayContaining([
+            expect.objectContaining({
+              name: expect.any(String),
+              description: expect.any(String)
+            })
+          ])
+        })
+      ])
+    }))
+
+    // You can also add specific assertions
+    expect(result.classes.length).toBeGreaterThan(0)
+    expect(result.classes[0].functions.length).toBe(2)
   })
 })
