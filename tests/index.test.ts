@@ -1,4 +1,36 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+
+// Mock @inngest/agent-kit before importing your code
+vi.mock('@inngest/agent-kit', () => {
+  return {
+    openai: () => ({
+      model: 'mock-model',
+    }),
+    createAgent: () => ({
+      run: async () => ({
+        output: [
+          {
+            type: 'text',
+            content: JSON.stringify({
+              language: 'ruby',
+              classes: [
+                {
+                  name: 'SomeClass',
+                  description: 'A mock class for testing.',
+                  functions: [
+                    { name: 'some_method', description: 'Mocked method 1.' },
+                    { name: 'another_method', description: 'Mocked method 2.' }
+                  ]
+                }
+              ]
+            })
+          }
+        ]
+      })
+    })
+  }
+})
+
 const { analyzeSourceCode } = await import('../src/index')
 
 const sourceCode = `
